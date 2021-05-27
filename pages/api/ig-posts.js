@@ -21,7 +21,7 @@ export default async (req, res) => {
     return
   }
   const results = await getInstagramPosts(username)
-  if (!!results.error) {
+  if (!!results?.error) {
     res.status(400).json(results)
   } else {
     res.status(200).json(results)
