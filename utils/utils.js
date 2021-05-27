@@ -23,7 +23,8 @@ export async function getInstagramPosts (username) {
       }else{
         data = (await axios.get(url)).data
       }
-
+      console.log({ url })
+      console.log(data)
       const posts = data.graphql.user.edge_owner_to_timeline_media.edges.map(post => (
         {
           id: post.node.id,
