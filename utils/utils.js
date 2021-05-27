@@ -21,8 +21,8 @@ export async function getInstagramPosts (username) {
       if (['test'].includes(process.env.ENV)){
         data = exampleData
       }else{
-        if (process.env.ENV === 'prod') data = await axios.get(url)
-        else data = await axios.get('/example-data.json')
+        if (process.env.ENV === 'prod') data = (await axios.get(url)).data
+        else data = (await axios.get('http://localhost:3000/example-data.json')).data
       }
 
       const posts = data.graphql.user.edge_owner_to_timeline_media.edges.map(post => (
