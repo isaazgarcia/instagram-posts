@@ -7,7 +7,7 @@ export function getInstagramApiUrl (username) {
 }
 
 export async function getInstagramPosts (username) {
-  const url = getInstagramApiUrl(username)
+  const url = process.env.ENV === 'prod'? getInstagramApiUrl(username) : process.env.BASE_URL + '/example-data.json'
   const value = cacheData.get(url)
   const cacheHours = process.env.CACHE_HOURS
 
@@ -21,8 +21,7 @@ export async function getInstagramPosts (username) {
       if (['test'].includes(process.env.ENV)){
         data = exampleData
       }else{
-        if (process.env.ENV === 'prod') data = (await axios.get(url)).data
-        else data = (await axios.get('http://localhost:3000/example-data.json')).data
+        data = (await axios.get(url)).data
       }
 
       const posts = data.graphql.user.edge_owner_to_timeline_media.edges.map(post => (
