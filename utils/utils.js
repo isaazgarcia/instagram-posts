@@ -11,13 +11,19 @@ export async function getInstagramPosts (username) {
   const value = cacheData.get(url)
   const cacheHours = process.env.CACHE_HOURS
 
-  if (!value) {
+  if (value) {
     console.log('Returning cache data')
     return value
   } else {
     try {
       // const { data } = await axios.get(url)
-      const data = exampleData
+      let data
+      if (['test'].includes(process.env.ENV)){
+        data = exampleData
+      }else{
+        if (process.env.ENV === 'prod') data = await axios.get(url)
+        else data = await axios.get('/example-data.json')
+      }
 
       const posts = data.graphql.user.edge_owner_to_timeline_media.edges.map(post => (
         {
@@ -44,7 +50,7 @@ export async function getInstagramPosts (username) {
       return profile
     } catch (error) {
       console.log({ error })
-      return ({ error: 'Error!', message: error })
+      return ({ error })
     }
   }
 }
